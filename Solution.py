@@ -80,9 +80,47 @@ def ford_fulkerson(graph, source, target):
         else:
             maxFlow += flow
 
+    #Calls min cut function and prints the result
+    print(minCut(graph, residual, source))
+
    
 
     return maxFlow
+
+def minCut(graph, residual, source):
+    #Initialize S and stack
+    S = []
+    stack = [source]
+
+    #Loops while the stack exists
+    while stack:
+        #Grabs the last element
+        u = stack.pop()
+        #as long as its a valid edge it adds it to S and the stack
+        for v in range(len(residual)):
+            if residual[u][v] != residual[0][0] and v not in S:
+                S.append(v)
+                stack.append(v)
+
+    #Initialize T and then fills it with the vertices not in S
+    T = []
+
+    for i in range(len(graph)):
+        if i not in S:
+            T.append(i)
+
+    #creates the edges list and then fills it with the edges from S to T
+    edges = []
+
+    for u in S:
+        for v in T:
+            if graph[u][v] != graph[0][0]:
+                edges.append((u, v))
+
+    #Returns the s and t arrays along with the edges
+    return S, T, edges
+
+
 
 
 
@@ -95,6 +133,7 @@ G = [#A  B  C  D  E
     [0, 0, 0, 0, 0],  # E
 ]
 
-print("Maximum possible flow: %d" %ford_fulkerson(G, 0, 4))
+max_flow = ford_fulkerson(G, 0, 4)
+print("Maximum possible flow: %d" %max_flow)
 
 
